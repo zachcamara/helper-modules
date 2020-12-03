@@ -24,7 +24,7 @@ class OrchHelper:
         self.apiSrcId2 = "&source=menu_rest_apis_id" #for API calls w/ multiple query params
         self.supportedAuthModes = ["local","radius","tacacs"] #remote authentication modes supported via this helper module
         self.authMode = "local"   # change this to the desired auth mode before invoking login() function.
-        requests.packages.urllib3.disable_warnings() #disable certificate warning messages 
+        #requests.packages.urllib3.disable_warnings() #disable certificate warning messages 
 
 ########## login ##########
 
@@ -51,7 +51,7 @@ class OrchHelper:
                 print ("{0}: Orchestrator login failed: {1}".format(self.url, response.text))
                 return False
         except:
-            print("{0}: Exception - unable to connect to Orchestrator".format(self.ipaddress))
+            print("{0}: Exception - unable to connect to Orchestrator".format(self.url))
             return False
 
     def mfa_login (self, mfacode):
@@ -76,7 +76,7 @@ class OrchHelper:
                 print ("{0}: Orchestrator MFA login failed: {1}".format(self.url, response.text))
                 return False
         except:
-            print("{0}: Exception - unable to connect to Orchestrator".format(self.ipaddress))
+            print("{0}: Exception - unable to connect to Orchestrator".format(self.url))
             return False
              
     def send_mfa(self):
@@ -97,7 +97,7 @@ class OrchHelper:
             else:
                 print ("{0}: Orchestrator logout failed: {1}".format(self.url, response.text))
         except:
-            print("{0}: Exception - unable to logout of Orchestrator".format(self.ipaddress))
+            print("{0}: Exception - unable to logout of Orchestrator".format(self.url))
 
 
     #def get_login_status(self):
@@ -160,14 +160,14 @@ class OrchHelper:
         if response.status_code == 200:
             return response
         else:
-            print("Failed to retrieve appliances from Orch at {0}".format(self.ipaddress))
+            print("Failed to retrieve appliances from Orch at {0}".format(self.url))
             return False
 
     #def delete_appliance():
         # DELETE /appliance/{nePk}
         # Delete an appliance from network.
 
-    def get_appliances_queued_for_deletion():
+    #def get_appliances_queued_for_deletion():
         # GET /appliance/queuedForDeletion
         # Lists appliances ( appliance primary keys) that are queued on the Orchestrator for deletion.
 
@@ -177,7 +177,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to delete appliance id:{0} from Orch at {1}".format(preconfigId,self.ipaddress))
+            print("Failed to delete appliance id:{0} from Orch at {1}".format(nePk,self.url))
             return False
 
     #def modify_appliance():
@@ -206,7 +206,7 @@ class OrchHelper:
         if response.status_code == 200:
             return response
         else:
-            print("Failed to retrieve discovered denied appliances from Orch at {0}".format(self.ipaddress))
+            print("Failed to retrieve discovered denied appliances from Orch at {0}".format(self.url))
             return False
 
     #def add_and_approve_discovered_appliances():
@@ -267,7 +267,7 @@ class OrchHelper:
         if response.status_code == 200:
             return response
         else:
-            print("Failed to retrieve template groups from Orch at {0}".format(self.ipaddress))
+            print("Failed to retrieve template groups from Orch at {0}".format(self.url))
             return False
 
     def get_template_group(self, templateGroup):
@@ -277,7 +277,7 @@ class OrchHelper:
         if response.status_code == 200:
             return response
         else:
-            print("Failed to retrieve template group {0} from Orch at {1}".format(templateGroup, self.ipaddress))
+            print("Failed to retrieve template group {0} from Orch at {1}".format(templateGroup, self.url))
             return False
     
     def post_template_group(self, templateGroup, templateGroupBody):
@@ -288,7 +288,7 @@ class OrchHelper:
             return True
         else:
             print (response.status_code)
-            print("Failed to create or update template group {0} from Orch at {1}".format(templateGroup,self.ipaddress))
+            print("Failed to create or update template group {0} from Orch at {1}".format(templateGroup,self.url))
             return False
 
     def select_templates_for_template_group(self, templateGroup, selectedTemplates):
@@ -298,7 +298,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to select templates {0} for template group {1} from Orch at {2}".format(selectedTemplates,templateGroup,self.ipaddress))
+            print("Failed to select templates {0} for template group {1} from Orch at {2}".format(selectedTemplates,templateGroup,self.url))
             return False
 
     
@@ -308,11 +308,11 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         elif response.status_code == 204:
-            print("Created a !!EMPTY!! template group {0} with no selected templates from Orch at {1}".format(templateGroupBody['name'],self.ipaddress))
+            print("Created a !!EMPTY!! template group {0} with no selected templates from Orch at {1}".format(templateGroupBody['name'],self.url))
             return True
         else:
             print (response.status_code)
-            print("Failed to create template group {0} from Orch at {1}".format(templateGroupBody['name'],self.ipaddress))
+            print("Failed to create template group {0} from Orch at {1}".format(templateGroupBody['name'],self.url))
             return False
 
 ########## linkIntegrity ##########
@@ -374,7 +374,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to perform broadcast cli on the appliances {0} from Orch at {1}".format(appliance_list,self.ipaddress))
+            print("Failed to perform broadcast cli on the appliances {0} from Orch at {1}".format(appliance_list,self.url))
             return False
 
 ########## bypass ##########
@@ -399,7 +399,7 @@ class OrchHelper:
         if response.status_code == 200:
             return response
         else:
-            print("Failed to retrieve preconfig metadata from Orch at {0}".format(self.ipaddress))
+            print("Failed to retrieve preconfig metadata from Orch at {0}".format(self.url))
             return False
 
     def delete_preconfig(self, preconfigId):
@@ -408,7 +408,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to delete preconfig id:{0} from Orch at {1}".format(preconfigId,self.ipaddress))
+            print("Failed to delete preconfig id:{0} from Orch at {1}".format(preconfigId,self.url))
             return False
 
     def approve_and_apply_preconfig(self, preconfigId, discovered_id):
@@ -417,7 +417,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to approve appliance (discovery id:{0}) and apply preconfiguration (preconfigId:{1}) discovered denied appliances from Orch at {2}".format(discovered_id,preconfigId,self.ipaddress))
+            print("Failed to approve appliance (discovery id:{0}) and apply preconfiguration (preconfigId:{1}) discovered denied appliances from Orch at {2}".format(discovered_id,preconfigId,self.url))
             return False
 
     def apply_preconfig_to_existing(self, preconfigId, nePk):
@@ -426,7 +426,7 @@ class OrchHelper:
         if response.status_code == 200:
             return True
         else:
-            print("Failed to apply preconfig (id: {0}) to appliance (nePk:{1}) from Orch at {2}".format(preconfigId,nePk,self.ipaddress))
+            print("Failed to apply preconfig (id: {0}) to appliance (nePk:{1}) from Orch at {2}".format(preconfigId,nePk,self.url))
             return False    
 
 ########## thirdPartyLicenses ##########
@@ -545,7 +545,7 @@ if __name__ == "__main__":
     #    mfa = input("Enter MFA code: ")
     #    o.mfa_login(mfa)
     
-    appliances = o.get_appliances()
+    appliances = o.get_all_appliances()
     print("Total appliances: ",len(appliances))
     
     o.logout()
