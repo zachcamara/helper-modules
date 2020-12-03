@@ -100,54 +100,54 @@ class OrchHelper:
             print("{0}: Exception - unable to logout of Orchestrator".format(self.ipaddress))
 
 
-    def get_login_status(self):
+    #def get_login_status(self):
         # GET /authentication/loginStatus
         # Get the current authentication status of the HTTP session
 
-    def validate_password():
+    #def validate_password():
         # POST /authentication/password/validation
         # Authenticate user's password only, but doesn't mark user's status as login
 
-    def check_mfa_type():
+    #def check_mfa_type():
         # POST /authentication/userAuthType
         # Check the two factor authentication methods the user requires to login
 
-    def check_mfa_type_active():
+    #def check_mfa_type_active():
         # POST /authentication/userAuthTypeToken
         # Check the two factor authentication methods the user has active using a reset password token
 
-    def oauth_login():
+    #def oauth_login():
         # GET /authentication/oauth/redirect
         # Login to Orchestrator using Oauth server
 
-    def oauth_state():
+    #def oauth_state():
         # GET /authentication/oauth/stateToken
         # Returns the Oauth state token needed to login
 
-    def jwt_login():
+    #def jwt_login():
         # GET /authentication/jwt
         # Used to login via JWT authentication
 
-    def saml_login():
+    #def saml_login():
         # POST /authentication/saml2/consume
         # Use to authenticate via SAML
 
-    def saml_logout():
+    #def saml_logout():
         # GET /authentication/saml2/logout
         # Logout of Orchestrator via SAML
 
 
 ########## gmsLicense ##########
 
-    def get_gms_license():
+    #def get_gms_license():
        # GET /gmsLicense
        # Get current license key and information
 
-    def set_gms_license():
+    #def set_gms_license():
         # POST /gmsLicense
         # Set Orchestrator license key
 
-    def validate_gms_license():
+    #def validate_gms_license():
         # GET /gmsLicense/validation
         # Validate a new license key
 
@@ -163,7 +163,7 @@ class OrchHelper:
             print("Failed to retrieve appliances from Orch at {0}".format(self.ipaddress))
             return False
 
-    def delete_appliance():
+    #def delete_appliance():
         # DELETE /appliance/{nePk}
         # Delete an appliance from network.
 
@@ -180,23 +180,23 @@ class OrchHelper:
             print("Failed to delete appliance id:{0} from Orch at {1}".format(preconfigId,self.ipaddress))
             return False
 
-    def modify_appliance():
+    #def modify_appliance():
         # POST /appliance/{nePk}
         # Modify an appliance's IP address, username, password, networkRole, and webProtocol.
 
-    def change_appliance_group():
+    #def change_appliance_group():
         # POST /appliance/changeGroup/{groupPk}
         # Change one or more appliances' group
 
-    def get_appliance_info():
+    #def get_appliance_info():
         # GET /appliance/{nePk}
         # Get appliance information
 
-    def get_all_discovered():
+    #def get_all_discovered():
         # GET /appliance/discovered
         # Returns the all discovered appliances
 
-    def get_all_approved():
+    #def get_all_approved():
         # GET /appliance/approved
         # Get the all approved appliances
 
@@ -209,47 +209,47 @@ class OrchHelper:
             print("Failed to retrieve discovered denied appliances from Orch at {0}".format(self.ipaddress))
             return False
 
-    def add_and_approve_discovered_appliances():
+    #def add_and_approve_discovered_appliances():
         # POST /appliance/discovered/approve/{key}
         # Add and approve discovered appliances
 
-    def add_discovered_appliances():
+    #def add_discovered_appliances():
         # POST /appliance/discovered/add/{key}
         # Add discovered appliances to Orchestrator
 
-    def deny_appliance():
+    #def deny_appliance():
         # POST /appliance/discovered/deny/{id}
         # Deny discovered appliances.
 
-    def update_discovered_appliances():
+    #def update_discovered_appliances():
         # PUT /appliance/discovered/update
         # Trigger discovered appliances update
 
-    def change_appliance_credentials():
+    #def change_appliance_credentials():
         # POST /appliance/changePassword/{nePk}/{username}
         # Change a user's password on appliance.
 
-    def appliance_get_api():
+    #def appliance_get_api():
         # GET /appliance/rest/{nePk}/{url : (.*)}
         # To communicate with appliance GET APIs directly.
 
-    def appliance_post_api():
+    #def appliance_post_api():
         # POST /appliance/rest/{nePk}/{url : (.*)}
         # To communicate with appliance POST APIs directly.
 
-    def get_appliance_stats_config():
+    #def get_appliance_stats_config():
         # GET /appliance/statsConfig
         # To get stats config which will be synchronized to appliances.
 
-    def modify_appliance_stats_config():
+    #def modify_appliance_stats_config():
         # POST /appliance/statsConfig
         # To modify stats config which will be synchronized to appliances.
 
-    def default_appliance_stats_config():
+    #def default_appliance_stats_config():
         # GET /appliance/statsConfig/default
         # To get default stats config which will be synchronized to appliances.
 
-    def get_appliance_dns_cache_config():
+    #def get_appliance_dns_cache_config():
         # GET /appliance/dnsCache/config/{neId}?cached={cached}
         # Gets DNS Cache configurations
 
@@ -260,6 +260,61 @@ class OrchHelper:
 ########## timeseriesStats ##########
 ########## realtimeStats ##########
 ########## template ##########
+
+    def get_all_template_groups(self):
+        # GET operation to retrieve all template groups
+        response = self.get("/template/templateGroups")
+        if response.status_code == 200:
+            return response
+        else:
+            print("Failed to retrieve template groups from Orch at {0}".format(self.ipaddress))
+            return False
+
+    def get_template_group(self, templateGroup):
+        # GET operation to retrieve template group contents
+        templateGroup.replace(" ", "%20")
+        response = self.get("/template/templateGroups/" + templateGroup)
+        if response.status_code == 200:
+            return response
+        else:
+            print("Failed to retrieve template group {0} from Orch at {1}".format(templateGroup, self.ipaddress))
+            return False
+    
+    def post_template_group(self, templateGroup, templateGroupBody):
+        # POST operation to update existing template group
+        templateGroup.replace(" ", "%20")
+        response = self.post("/template/templateGroups/" + templateGroup, templateGroupBody)
+        if response.status_code == 200:
+            return True
+        else:
+            print (response.status_code)
+            print("Failed to create or update template group {0} from Orch at {1}".format(templateGroup,self.ipaddress))
+            return False
+
+    def select_templates_for_template_group(self, templateGroup, selectedTemplates):
+        # POST operation to select templates for existing template group
+        templateGroup.replace(" ", "%20")
+        response = self.post("/template/templateSelection/" + templateGroup, selectedTemplates)
+        if response.status_code == 200:
+            return True
+        else:
+            print("Failed to select templates {0} for template group {1} from Orch at {2}".format(selectedTemplates,templateGroup,self.ipaddress))
+            return False
+
+    
+    def create_template_group(self, templateGroupBody):
+        # POST operation to create new template group
+        response = self.post("/template/templateCreate", templateGroupBody)
+        if response.status_code == 200:
+            return True
+        elif response.status_code == 204:
+            print("Created a !!EMPTY!! template group {0} with no selected templates from Orch at {1}".format(templateGroupBody['name'],self.ipaddress))
+            return True
+        else:
+            print (response.status_code)
+            print("Failed to create template group {0} from Orch at {1}".format(templateGroupBody['name'],self.ipaddress))
+            return False
+
 ########## linkIntegrity ##########
 ########## routePolicy ##########
 ########## optimizationPolicy ##########
